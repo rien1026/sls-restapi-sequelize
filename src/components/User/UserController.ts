@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import { AppError } from '../../utils/AppError';
 import { UserService } from './UserService';
-import { UserNoPathParam } from './User';
+import { UserNoPathParam, PostUserParams } from './User';
 
 /**
  * @swagger
@@ -110,6 +110,10 @@ const getUserList = async (ctx: Koa.Context) => {
  */
 const postUser = async (ctx: Koa.Context) => {
 	try {
+		let params = await PostUserParams.validateAsync(ctx.request.body);
+
+		await UserService.insertUser(params);
+
 		ctx.status = 200;
 		ctx.body = { msg: 'suc' };
 	} catch (err) {
@@ -180,4 +184,4 @@ const deleteUser = async (ctx: Koa.Context) => {
 	}
 };
 
-export const UserController = { getUserList, getUser };
+export const UserController = { getUserList, getUser, postUser };

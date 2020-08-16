@@ -1,5 +1,6 @@
 import { AppError } from '../../utils';
 import { User } from './User';
+import bcrypt from 'bcrypt';
 
 const getRawUserList = async ({
 	limit = 5,
@@ -27,4 +28,16 @@ const getUserByPk = async (no: number, { attributes = ['*'] }: { attributes: str
 	}
 };
 
-export const UserService = { getUserByPk, getRawUserList };
+const insertUser = async (params: { email: string, passwd: string, salt?: string }) => {
+	try {
+
+		params.salt = await bcrypt.genSalt(10);
+		params.passwd = await bcrypt.hash(params.passwd, params.salt);
+
+		return await new User(params).save();
+	} catch (err) {
+		throw new AppError('SinsertUser', err.message, err.stack);
+	}
+}
+
+export const UserService = { getUserByPk, getRawUserList, insertUser };

@@ -1,5 +1,6 @@
 import { Column, Model, CreatedAt, UpdatedAt, DeletedAt, Table, DataType } from 'sequelize-typescript';
 import Joi from '@hapi/joi';
+import bcrypt from 'bcrypt';
 
 @Table({ tableName: 'User' })
 export class User extends Model<User> {
@@ -24,6 +25,41 @@ export class User extends Model<User> {
 	@DeletedAt
 	public delDt: Date;
 }
+
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PostUserSchema:
+ *       type: object
+ *       properties:
+ *         email:
+ *           type: string
+ *           example: email
+ *         passwd:
+ *           type: string
+ *           example: passwd
+ *         personalInfoAgreeYn:
+ *           type: boolean
+ *       required:
+ *         - email
+ *         - passwd
+ *
+ *   parameters:
+ *     PostUserParams:
+ *       name: PostUserParams
+ *       in: body
+ *       description: params for insert user.
+ *       required: true
+ *       schema:
+ *         $ref: '#components/schemas/PostUserSchema'
+ */
+
+export const PostUserParams = Joi.object({
+	email: Joi.string().email().max(100).required(),
+	passwd: Joi.string().required(),
+});
 
 /**
  * @swagger

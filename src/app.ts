@@ -47,6 +47,7 @@ app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 // User
 router.get('/app/users', UserController.getUserList);
 router.get('/app/users/:userNo', UserController.getUser);
+router.post('/app/users', UserController.postUser);
 
 app.use(router.routes());
 app.use(router.allowedMethods());
