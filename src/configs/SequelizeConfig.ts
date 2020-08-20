@@ -10,6 +10,20 @@ const sequelize = new Sequelize({
 	username: Constants.DB_CONFIG.MYSQL_USER,
 	password: Constants.DB_CONFIG.MYSQL_PASSWD,
 	storage: ':memory:',
+	hooks: {
+		beforeBulkCreate: (option: any) => {
+			option.individualHooks = true;
+		},
+		beforeBulkUpdate: (option: any) => {
+			option.individualHooks = true;
+		},
+		beforeBulkDestroy: (option: any) => {
+			option.individualHooks = true;
+		},
+		beforeCreate: (instance: any) => {},
+		beforeUpdate: (instance: any) => {},
+		beforeDestroy: async (instance: any) => {},
+	},
 	models: [User],
 });
 
