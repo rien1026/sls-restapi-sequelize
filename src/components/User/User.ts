@@ -26,7 +26,6 @@ export class User extends Model<User> {
 	public delDt: Date;
 }
 
-
 /**
  * @swagger
  * components:
@@ -40,8 +39,6 @@ export class User extends Model<User> {
  *         passwd:
  *           type: string
  *           example: passwd
- *         personalInfoAgreeYn:
- *           type: boolean
  *       required:
  *         - email
  *         - passwd
@@ -59,6 +56,31 @@ export class User extends Model<User> {
 export const PostUserParams = Joi.object({
 	email: Joi.string().email().max(100).required(),
 	passwd: Joi.string().required(),
+});
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PutUserSchema:
+ *       type: object
+ *       properties:
+ *         passwd:
+ *           type: string
+ *           example: passwd
+ *
+ *   parameters:
+ *     PutUserParams:
+ *       name: PutUserParams
+ *       in: body
+ *       description: params for update user.
+ *       required: true
+ *       schema:
+ *         $ref: '#components/schemas/PutUserSchema'
+ */
+
+export const PutUserParams = Joi.object({
+	passwd: Joi.string(),
 });
 
 /**

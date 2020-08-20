@@ -48,6 +48,8 @@ app.use(async (ctx: Koa.Context, next: Koa.Next) => {
 router.get('/app/users', UserController.getUserList);
 router.get('/app/users/:userNo', UserController.getUser);
 router.post('/app/users', UserController.postUser);
+router.put('/app/users/:userNo', UserController.putUser);
+router.delete('/app/users/:userNo', UserController.deleteUser);
 
 app.use(router.routes());
 app.use(router.allowedMethods());

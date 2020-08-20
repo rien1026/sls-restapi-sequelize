@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import { AppError } from '../../utils/AppError';
 import { UserService } from './UserService';
-import { UserNoPathParam, PostUserParams } from './User';
+import { UserNoPathParam, PostUserParams, PutUserParams } from './User';
 
 /**
  * @swagger
@@ -19,6 +19,8 @@ import { UserNoPathParam, PostUserParams } from './User';
  * /users/:userNo:
  *   get:
  *     tags: [User]
+ *     parameters:
+ *       - $ref: '#components/parameters/UserNoPathParam'
  *     responses:
  *       200:
  *         description: SUC
@@ -130,6 +132,9 @@ const postUser = async (ctx: Koa.Context) => {
  * /users/:userNo:
  *   put:
  *     tags: [User]
+ *     parameters:
+ *       - $ref: '#components/parameters/UserNoPathParam'
+ *       - $ref: '#components/parameters/PutUserParams' *
  *     responses:
  *       200:
  *         description: SUC
@@ -144,6 +149,11 @@ const postUser = async (ctx: Koa.Context) => {
  */
 const putUser = async (ctx: Koa.Context) => {
 	try {
+		let pathParam = await UserNoPathParam.validateAsync({ userNo: ctx.params.userNo });
+		let params = await PutUserParams.validateAsync(ctx.request.body);
+
+		await UserService.updateUser(pathParam.userNo, params);
+
 		ctx.status = 200;
 		ctx.body = { msg: 'suc' };
 	} catch (err) {
@@ -160,6 +170,8 @@ const putUser = async (ctx: Koa.Context) => {
  * /users/:userNo:
  *   delete:
  *     tags: [User]
+ *     parameters:
+ *       - $ref: '#components/parameters/UserNoPathParam'
  *     responses:
  *       200:
  *         description: SUC
@@ -174,6 +186,10 @@ const putUser = async (ctx: Koa.Context) => {
  */
 const deleteUser = async (ctx: Koa.Context) => {
 	try {
+		let pathParam = await UserNoPathParam.validateAsync({ userNo: ctx.params.userNo });
+
+		await UserService.deleteUser(pathParam.userNo);
+
 		ctx.status = 200;
 		ctx.body = { msg: 'suc' };
 	} catch (err) {
@@ -184,4 +200,4 @@ const deleteUser = async (ctx: Koa.Context) => {
 	}
 };
 
-export const UserController = { getUserList, getUser, postUser };
+export const UserController = { getUserList, getUser, postUser, putUser, deleteUser };
